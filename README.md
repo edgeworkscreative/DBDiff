@@ -30,10 +30,26 @@ This is what DBDiff is.
 -   Is Unicode aware, can work with UTF8 data, which includes foreign characters/symbols
 -   Works with just MySQL for now, but we will be expanding to other DBs in the future on request (please create an issue!)
 
-# Pre-requisites
+# Usage with docker
+1. Make sure you have installed docker: https://docs.docker.com/install/
+2. Create a file called '.dbdiff' in the repository and set your configuration (for more details see [.dbdiff.example](.dbdiff.example))
+3. Build the docker image:
+```
+docker build --tag dbdiff:master .
+```
+4. Start the container and mount the directory of DBDiff into the container (needed for configuration files + output files):
+```
+docker run -it --net=host \
+           -v /PATH/TO/YOUR/DBDIFF/REPOSITORY:/home/dbdiff \
+           dbdiff:master \
+           ./dbdiff server1.db1:server2.db2
+```
+5. The resulting SQL file will be found in the mounted repository folder named 'migration.sql'
+
+# Pre-requisites for manual build
 1. You will need to have access to the command-line, for Linux/Mac a Terminal or on Windows it will be a command prompt (`cmd`)
 2. You will need to have git installed: http://git-scm.com/downloads
-3. You will need to have PHP installed (version 5.4.x): http://php.net/manual/en/install.php
+3. You will need to have PHP installed: http://php.net/manual/en/install.php
 4. You will need to have Composer installed which is a Dependency Manager for PHP: https://getcomposer.org
 
 _Note: Make a note of where `composer.phar` is installed as we will need it later on during Setup_
