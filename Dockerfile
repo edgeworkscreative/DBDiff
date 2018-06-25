@@ -10,12 +10,15 @@ RUN apt-get update && \
 # install php extension for the MySQL connection
 RUN docker-php-ext-install pdo pdo_mysql
 
-WORKDIR /home/dbdiff
+ENV HOME /home/dbdiff
+RUN useradd --create-home --home-dir $HOME dbdiff && chown -R dbdiff:dbdiff $HOME
+USER dbdiff
+
+WORKDIR $HOME
 
 # add current directory into the docker container
 COPY . ./
 
 # download & install composer
-ADD https://getcomposer.org/composer.phar composer
-RUN chmod +x composer
-RUN ./composer install
+RUN curl -sS https://getcomposer.org/installer | php -- --install- dir=/usr/local/bin --filename=composer
+RUN php composer install
